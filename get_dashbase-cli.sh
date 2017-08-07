@@ -12,7 +12,7 @@ set -e
 #
 # Git commit from https://github.com/dashbase/dashbase-cmdline-install when
 # the script was uploaded (Should only be modified by upload job):
-SCRIPT_COMMIT_SHA=548a889aacc654420f3e715d6c5c2f97
+SCRIPT_COMMIT_SHA=81d6abb3de02fb5ba53639ca950ae13a984328cc
 
 command_exists() {
 	command -v "$@" > /dev/null 2>&1
