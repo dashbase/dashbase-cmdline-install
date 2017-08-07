@@ -11,7 +11,7 @@ sh get_dashbase-cli.sh
 ```
 
 
-##### Supported:
+##### Supported and Tested:
 - Amazon Linux AMI 2017.03.1
 - Ubuntu Server 16.04 LTS
 - Debian GNU/Linux 8 (Jessie)
