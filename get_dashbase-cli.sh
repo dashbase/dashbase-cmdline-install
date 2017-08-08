@@ -181,14 +181,12 @@ do_install() {
 	# Run setup for each distro accordingly
 	install_python() {
 	    curl -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash
-	    echo 'export PATH="~/.pyenv/bin:$PATH"' >> ${bashfile}
+	    echo 'export PATH="$HOME/.pyenv/bin:$PATH"' >> ${bashfile}
         echo 'eval "$(pyenv init -)"' >> ${bashfile}
         echo 'eval "$(pyenv virtualenv-init -)"' >> ${bashfile}
-        if command_exists source; then
-            source ${bashfile}
-        else
-            . ${bashfile}
-        fi
+        export PATH="$HOME/.pyenv/bin:$PATH"
+        eval "$(pyenv init -)"
+        eval "$(pyenv virtualenv-init -)"
         pyenv install 2.7.13
         pyenv global 2.7.13
         echo "Change python version to 2.7.13"
@@ -196,7 +194,7 @@ do_install() {
 	}
     install_dashbase_cli() {
         # if don't specify version will have problem on some release
-        $sh_c 'python -m pip install dashbase==1.0.0rc8.post1'
+        python -m pip install dashbase==1.0.0rc8.post1
     }
     bashfile=$HOME/.bashrc
     if [ ! -f ${bashfile} ]; then
@@ -231,10 +229,10 @@ do_install() {
                 $sh_c 'apt-get install -y build-essential libssl-dev openjdk-8-jre-headless libffi-dev gcc g++ wget curl git'
                 install_python
                 install_dashbase_cli
+                echo "We have changed python version to 2.7.13"
+                echo "You can change back using 'pyenv global system'."
                 $sh_c 'update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java'
 			)
-			echo "We have changed python version to 2.7.13"
-            echo "You can change back using 'pyenv global system'."
 			exit 0
 			;;
 		centos|amzn|rhel|fedora)
@@ -260,10 +258,10 @@ do_install() {
 				$sh_c "$pkg_manager -y install gcc gcc-c++ kernel-devel libxslt-devel libffi-devel openssl-devel java-1.8.0-openjdk wget curl git"
 				install_python
 				install_dashbase_cli
+				echo "We have changed python version to 2.7.13"
+                echo "You can change back using 'pyenv global system'."
 				$sh_c 'update-alternatives --set java /usr/lib/jvm/jre-1.8.0-openjdk.x86_64/bin/java'
 			)
-			echo "We have changed python version to 2.7.13"
-            echo "You can change back using 'pyenv global system'."
 			exit 0
 			;;
 	esac
