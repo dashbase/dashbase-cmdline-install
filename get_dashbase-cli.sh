@@ -180,34 +180,28 @@ do_install() {
 
 	# Run setup for each distro accordingly
 	install_python() {
-	    $sh_c 'mv /usr/bin/python /usr/bin/python.old'
-        $sh_c 'mv /usr/bin/python2 /usr/bin/python2.old'
-        $sh_c 'mv /usr/bin/python2.7 /usr/bin/python2.7.old'
-        if [ -f "/usr/bin/yum" ]; then
-            $sh_c 'sed -i "s/python/python2.7.old/" /usr/libexec/urlgrabber-ext-down'
-            $sh_c 'sed -i "s/python/python2.7.old/" /usr/bin/yum'
+	    $sh_c 'curl -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash'
+	    echo 'export PATH="~/.pyenv/bin:$PATH"' >> ${bashfile}
+        echo 'eval "$(pyenv init -)"' >> ${bashfile}
+        echo 'eval "$(pyenv virtualenv-init -)"' >> ${bashfile}
+        if command_exists source; then
+            source ${bashfile}
+        else
+            . ${bashfile}
         fi
-        $sh_c 'wget https://www.python.org/ftp/python/2.7.13/Python-2.7.13.tgz'
-        $sh_c 'tar zxf Python-2.7.13.tgz'
-        $sh_c 'cd Python-2.7.13 && sudo ./configure --enable-optimizations && sudo make && sudo make install'
-        $sh_c 'rm -f /usr/bin/python-config'
-        $sh_c 'ln -s /usr/local/bin/python /usr/bin/python'
-        $sh_c 'ln -s /usr/local/bin/python /usr/bin/python2'
-        $sh_c 'ln -s /usr/local/bin/python /usr/bin/python2.7'
-        $sh_c 'ln -s /usr/local/bin/python-config /usr/bin/python-config'
-        $sh_c 'ln -s /usr/local/include/python2.7/ /usr/include/python2.7'
-        $sh_c 'rm -rf Python-2.7.13*'
-        $sh_c 'wget https://bootstrap.pypa.io/get-pip.py'
-        if [ -f "/usr/bin/lsb_release" ]; then
-            $sh_c 'sed -i "s/python/python2.7.old/" /usr/bin/lsb_release'
-        fi
-        $sh_c 'python get-pip.py'
-        $sh_c 'rm -f get-pip.py'
-    }
+        $sh_c 'pyenv install 2.7.13'
+        $sh_c 'pyenv global 2.7.13'
+        echo "Change python version to 2.7.13"
+        echo "You can change back using pyenv."
+	}
     install_dashbase_cli() {
         # if don't specify version will have problem on some release
         $sh_c 'python -m pip install dashbase==1.0.0rc8.post1'
     }
+    bashfile="~/.bashrc"
+    if [ ! -f ${bashfile} ]; then
+        bashfile="~/.bash_profile"
+    fi
 	case "$lsb_dist" in
 		ubuntu|debian)
 			pre_reqs="apt-transport-https ca-certificates curl"
@@ -234,12 +228,8 @@ do_install() {
 				    $sh_c 'apt-get update'
 				    $sh_c 'apt-get install -y -t jessie-backports ca-certificates-java'
                 fi
-                $sh_c 'apt-get install -y build-essential libssl-dev openjdk-8-jre-headless libffi-dev gcc g++ wget'
-                if [ "$lsb_dist" = "debian" ]; then
-                    install_python
-                else
-				    $sh_c 'apt-get install -y python python-pip python-dev python-all'
-                fi
+                $sh_c 'apt-get install -y build-essential libssl-dev openjdk-8-jre-headless libffi-dev gcc g++ wget curl'
+                install_python
                 install_dashbase_cli
                 $sh_c 'update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java'
 			)
@@ -265,14 +255,8 @@ do_install() {
 				set -x
 				$sh_c "$pkg_manager -y update"
 				$sh_c "$pkg_manager install -y -q $pre_reqs"
-				$sh_c "$pkg_manager -y install gcc gcc-c++ kernel-devel libxslt-devel libffi-devel openssl-devel java-1.8.0-openjdk wget"
-				if [ "$lsb_dist" = "rhel" ]; then
-				    install_python
-                elif [ "$lsb_dist" = "fedora" ]; then
-                    $sh_c "$pkg_manager -y install python27 python-pip python-devel redhat-rpm-config"
-                else
-                    $sh_c "$pkg_manager -y install python27 python27-pip python27-devel"
-				fi
+				$sh_c "$pkg_manager -y install gcc gcc-c++ kernel-devel libxslt-devel libffi-devel openssl-devel java-1.8.0-openjdk wget curl"
+				install_python
 				install_dashbase_cli
 				$sh_c 'update-alternatives --set java /usr/lib/jvm/jre-1.8.0-openjdk.x86_64/bin/java'
 			)
