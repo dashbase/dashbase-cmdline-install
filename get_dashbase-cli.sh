@@ -180,7 +180,7 @@ do_install() {
 
 	# Run setup for each distro accordingly
 	install_python() {
-	    $sh_c 'curl -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash'
+	    curl -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash
 	    echo 'export PATH="~/.pyenv/bin:$PATH"' >> ${bashfile}
         echo 'eval "$(pyenv init -)"' >> ${bashfile}
         echo 'eval "$(pyenv virtualenv-init -)"' >> ${bashfile}
@@ -189,18 +189,18 @@ do_install() {
         else
             . ${bashfile}
         fi
-        $sh_c 'pyenv install 2.7.13'
-        $sh_c 'pyenv global 2.7.13'
+        pyenv install 2.7.13
+        pyenv global 2.7.13
         echo "Change python version to 2.7.13"
-        echo "You can change back using pyenv."
+        echo "You can change back using 'pyenv global system'."
 	}
     install_dashbase_cli() {
         # if don't specify version will have problem on some release
         $sh_c 'python -m pip install dashbase==1.0.0rc8.post1'
     }
-    bashfile="~/.bashrc"
+    bashfile=$HOME/.bashrc
     if [ ! -f ${bashfile} ]; then
-        bashfile="~/.bash_profile"
+        bashfile=$HOME/.bash_profile
     fi
 	case "$lsb_dist" in
 		ubuntu|debian)
