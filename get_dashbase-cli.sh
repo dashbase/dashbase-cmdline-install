@@ -228,7 +228,7 @@ do_install() {
 				    $sh_c 'apt-get update'
 				    $sh_c 'apt-get install -y -t jessie-backports ca-certificates-java'
                 fi
-                $sh_c 'apt-get install -y build-essential libssl-dev openjdk-8-jre-headless libffi-dev gcc g++ wget curl'
+                $sh_c 'apt-get install -y build-essential libssl-dev openjdk-8-jre-headless libffi-dev gcc g++ wget curl git'
                 install_python
                 install_dashbase_cli
                 $sh_c 'update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java'
@@ -255,7 +255,7 @@ do_install() {
 				set -x
 				$sh_c "$pkg_manager -y update"
 				$sh_c "$pkg_manager install -y -q $pre_reqs"
-				$sh_c "$pkg_manager -y install gcc gcc-c++ kernel-devel libxslt-devel libffi-devel openssl-devel java-1.8.0-openjdk wget curl"
+				$sh_c "$pkg_manager -y install gcc gcc-c++ kernel-devel libxslt-devel libffi-devel openssl-devel java-1.8.0-openjdk wget curl git"
 				install_python
 				install_dashbase_cli
 				$sh_c 'update-alternatives --set java /usr/lib/jvm/jre-1.8.0-openjdk.x86_64/bin/java'
