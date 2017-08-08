@@ -233,6 +233,8 @@ do_install() {
                 install_dashbase_cli
                 $sh_c 'update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java'
 			)
+			echo "We have changed python version to 2.7.13"
+            echo "You can change back using 'pyenv global system'."
 			exit 0
 			;;
 		centos|amzn|rhel|fedora)
@@ -260,6 +262,8 @@ do_install() {
 				install_dashbase_cli
 				$sh_c 'update-alternatives --set java /usr/lib/jvm/jre-1.8.0-openjdk.x86_64/bin/java'
 			)
+			echo "We have changed python version to 2.7.13"
+            echo "You can change back using 'pyenv global system'."
 			exit 0
 			;;
 	esac
