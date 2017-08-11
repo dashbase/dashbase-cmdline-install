@@ -99,14 +99,11 @@ do_install() {
 			Warning: the "dashbase-cli" command appears to already exist on this system.
 
 			If you already have dashbase-cli installed, this script can cause trouble, which is
-			why we're displaying this warning and provide the opportunity to cancel the
-			installation.
+			why we're displaying this warning.
 
 			If you want to upgrade "dashbase-cli" you can use "(sudo) pip install dashbase --upgrade"
-
-			You may press Ctrl+C now to abort this script.
 		EOF
-		( set -x; sleep 20 )
+		exit 0
 	fi
 
 	user="$(id -un 2>/dev/null || true)"
