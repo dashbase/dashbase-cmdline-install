@@ -194,7 +194,7 @@ do_install() {
 	}
     install_dashbase_cli() {
         # if don't specify version will have problem on some release
-        python -m pip install dashbase==1.0.0rc8.post2
+        python -m pip install dashbase==1.0.0rc8.post3
     }
     bashfile=$HOME/.bashrc
     if [ ! -f ${bashfile} ]; then
