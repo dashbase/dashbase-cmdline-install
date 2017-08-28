@@ -103,7 +103,7 @@ do_install() {
 
 			If you want to upgrade "dashbase-cli" you can use "(sudo) pip install dashbase --upgrade"
 		EOF
-		exit 10
+		exit 0
 	fi
 
 	user="$(id -un 2>/dev/null || true)"
