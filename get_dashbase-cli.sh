@@ -228,6 +228,7 @@ do_install() {
                 install_dashbase_cli
                 echo "We have changed python version to 2.7.13"
                 echo "You can change back using 'pyenv global system'."
+		echo "Please refresh your env using 'source ~/.bashrc' before using dashbase-cli."
 			)
 			exit 0
 			;;
@@ -259,6 +260,7 @@ do_install() {
 		                if [ "$lsb_dist" = "amzn" ]; then
 				    $sh_c 'update-alternatives --set java /usr/lib/jvm/jre-1.8.0-openjdk.x86_64/bin/java'
 				fi
+				echo "Please refresh your env using 'source ~/.bashrc' before using dashbase-cli."
 			)
 			exit 0
 			;;
