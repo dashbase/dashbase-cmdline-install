@@ -176,7 +176,7 @@ do_install() {
 	# Run setup for each distro accordingly
     install_dashbase_cli() {
         # if don't specify version will have problem on some release
-        $sh_c 'pip install dashbase --upgrade'
+        pip install dashbase --upgrade
     }
 	case "$lsb_dist" in
 		ubuntu|debian)
