@@ -235,7 +235,7 @@ do_install() {
                 if [ "$lsb_dist" = "fedora" ]; then
                     $sh_c "$pkg_manager -y install python27 python-pip python-devel redhat-rpm-config"
                 elif [ "$lsb_dist" = "rhel" ]; then
-                    $sh_c "$pkg_manager -y install python python-pip python-devel"
+                    $sh_c "$pkg_manager -y install python python-devel"
                     $sh_c "curl https://bootstrap.pypa.io/get-pip.py | sudo python"
                 else
                     $sh_c "$pkg_manager -y install python27 python27-pip python27-devel"
