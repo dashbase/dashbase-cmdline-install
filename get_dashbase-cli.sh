@@ -99,7 +99,7 @@ do_install() {
 			Warning: the "dashbase-cli" command appears to already exist on this system.
 			If you already have dashbase-cli installed, this script can cause trouble, which is
 			why we're displaying this warning.
-			If you want to upgrade "dashbase-cli" you can use "pip install dashbase --upgrade"
+			If you want to upgrade "dashbase-cli" you can use "(sudo) pip install dashbase --upgrade"
 		EOF
 		exit 0
 	fi
@@ -176,8 +176,7 @@ do_install() {
 	# Run setup for each distro accordingly
     install_dashbase_cli() {
         # if don't specify version will have problem on some release
-        sudo pip install setuptools --upgrade
-        sh -c "pip install dashbase --upgrade"
+        $sh_c "pip install dashbase --upgrade"
     }
 	case "$lsb_dist" in
 		ubuntu|debian)
