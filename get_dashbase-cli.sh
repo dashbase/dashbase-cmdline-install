@@ -234,6 +234,8 @@ do_install() {
 				$sh_c "$pkg_manager -y install gcc gcc-c++ kernel-devel libxslt-devel libffi-devel openssl-devel java-1.8.0-openjdk wget"
                 if [ "$lsb_dist" = "fedora" ]; then
                     $sh_c "$pkg_manager -y install python27 python-pip python-devel redhat-rpm-config"
+                elif [ "$lsb_dist" = "rhel" ]; then
+                    $sh_c "$pkg_manager -y install python python-pip python-devel"
                 else
                     $sh_c "$pkg_manager -y install python27 python27-pip python27-devel"
 				fi
