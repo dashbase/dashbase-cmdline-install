@@ -205,11 +205,7 @@ do_install() {
 				    $sh_c 'apt-get install -y -t jessie-backports ca-certificates-java'
                 fi
                 $sh_c 'apt-get install -y build-essential libssl-dev openjdk-8-jre-headless libffi-dev gcc g++ wget'
-                if [ "$lsb_dist" = "debian" ]; then
-                    install_python
-                else
-				    $sh_c 'apt-get install -y python python-pip python-dev python-all'
-                fi
+				$sh_c 'apt-get install -y python python-pip python-dev python-all'
                 install_dashbase_cli
                 $sh_c 'update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java'
 			)
@@ -236,9 +232,7 @@ do_install() {
 				$sh_c "$pkg_manager -y update"
 				$sh_c "$pkg_manager install -y -q $pre_reqs"
 				$sh_c "$pkg_manager -y install gcc gcc-c++ kernel-devel libxslt-devel libffi-devel openssl-devel java-1.8.0-openjdk wget"
-				if [ "$lsb_dist" = "rhel" ]; then
-				    install_python
-                elif [ "$lsb_dist" = "fedora" ]; then
+                if [ "$lsb_dist" = "fedora" ]; then
                     $sh_c "$pkg_manager -y install python27 python-pip python-devel redhat-rpm-config"
                 else
                     $sh_c "$pkg_manager -y install python27 python27-pip python27-devel"
