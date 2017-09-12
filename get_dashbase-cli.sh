@@ -12,7 +12,7 @@ set -e
 #
 # Git commit from https://github.com/dashbase/dashbase-cmdline-install when
 # the script was uploaded (Should only be modified by upload job):
-SCRIPT_COMMIT_SHA=ce36df53ccfc4e8c5eb41b858225b7eac25a59a7
+SCRIPT_COMMIT_SHA=548a889aacc654420f3e715d6c5c2f97
 
 command_exists() {
 	command -v "$@" > /dev/null 2>&1
@@ -97,11 +97,9 @@ do_install() {
 	if command_exists dashbase-cli; then
 		cat >&2 <<-'EOF'
 			Warning: the "dashbase-cli" command appears to already exist on this system.
-
 			If you already have dashbase-cli installed, this script can cause trouble, which is
 			why we're displaying this warning.
-
-			If you want to upgrade "dashbase-cli" you can use "(sudo) pip install dashbase --upgrade"
+			If you want to upgrade "dashbase-cli" you can use "pip install dashbase --upgrade"
 		EOF
 		exit 0
 	fi
@@ -176,27 +174,10 @@ do_install() {
 	check_forked
 
 	# Run setup for each distro accordingly
-	install_python() {
-	    curl -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash
-	    echo 'export PATH="$HOME/.pyenv/bin:$PATH"' >> ${bashfile}
-        echo 'eval "$(pyenv init -)"' >> ${bashfile}
-        echo 'eval "$(pyenv virtualenv-init -)"' >> ${bashfile}
-        export PATH="$HOME/.pyenv/bin:$PATH"
-        eval "$(pyenv init -)"
-        eval "$(pyenv virtualenv-init -)"
-        pyenv install 2.7.13
-        pyenv global 2.7.13
-        echo "Change python version to 2.7.13"
-        echo "You can change back using 'pyenv global system'."
-	}
     install_dashbase_cli() {
         # if don't specify version will have problem on some release
-        python -m pip install dashbase --upgrade
+        $sh_c 'pip install dashbase --upgrade'
     }
-    bashfile=$HOME/.bashrc
-    if [ ! -f ${bashfile} ]; then
-        bashfile=$HOME/.bash_profile
-    fi
 	case "$lsb_dist" in
 		ubuntu|debian)
 			pre_reqs="apt-transport-https ca-certificates curl"
@@ -223,12 +204,14 @@ do_install() {
 				    $sh_c 'apt-get update'
 				    $sh_c 'apt-get install -y -t jessie-backports ca-certificates-java'
                 fi
-                $sh_c 'apt-get install -y build-essential libssl-dev openjdk-8-jre-headless libffi-dev gcc g++ wget curl git'
-                install_python
+                $sh_c 'apt-get install -y build-essential libssl-dev openjdk-8-jre-headless libffi-dev gcc g++ wget'
+                if [ "$lsb_dist" = "debian" ]; then
+                    install_python
+                else
+				    $sh_c 'apt-get install -y python python-pip python-dev python-all'
+                fi
                 install_dashbase_cli
-                echo "We have changed python version to 2.7.13"
-                echo "You can change back using 'pyenv global system'."
-		echo "Please refresh your env using 'source ~/.bashrc' before using dashbase-cli."
+                $sh_c 'update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java'
 			)
 			exit 0
 			;;
@@ -252,15 +235,16 @@ do_install() {
 				set -x
 				$sh_c "$pkg_manager -y update"
 				$sh_c "$pkg_manager install -y -q $pre_reqs"
-				$sh_c "$pkg_manager -y install gcc gcc-c++ kernel-devel libxslt-devel libffi-devel openssl-devel java-1.8.0-openjdk wget curl git"
-				install_python
-				install_dashbase_cli
-				echo "We have changed python version to 2.7.13"
-                echo "You can change back using 'pyenv global system'."
-		                if [ "$lsb_dist" = "amzn" ]; then
-				    $sh_c 'update-alternatives --set java /usr/lib/jvm/jre-1.8.0-openjdk.x86_64/bin/java'
+				$sh_c "$pkg_manager -y install gcc gcc-c++ kernel-devel libxslt-devel libffi-devel openssl-devel java-1.8.0-openjdk wget"
+				if [ "$lsb_dist" = "rhel" ]; then
+				    install_python
+                elif [ "$lsb_dist" = "fedora" ]; then
+                    $sh_c "$pkg_manager -y install python27 python-pip python-devel redhat-rpm-config"
+                else
+                    $sh_c "$pkg_manager -y install python27 python27-pip python27-devel"
 				fi
-				echo "Please refresh your env using 'source ~/.bashrc' before using dashbase-cli."
+				install_dashbase_cli
+				$sh_c 'update-alternatives --set java /usr/lib/jvm/jre-1.8.0-openjdk.x86_64/bin/java'
 			)
 			exit 0
 			;;
