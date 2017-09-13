@@ -2,8 +2,7 @@
 set -e
 
 # This script is meant for quick & easy install via:
-#   $ curl -fsSL get.dashbase.io -o get_dashbase-cli.sh
-#   $ sh get_dashbase-cli.sh
+#   $ curl -fsSL get.dashbase.io | sh
 #
 # NOTE: Make sure to verify the contents of the script
 #       you downloaded matches the contents of install.sh
