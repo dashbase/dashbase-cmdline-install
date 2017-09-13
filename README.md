@@ -3,14 +3,10 @@
 
 #### Usage:
 ```
-curl -fsSL get.dashbase.io -o get_dashbase-cli.sh
-chmod +x get_dashbase-cli.sh
-./get_dashbase-cli.sh
+curl -fsSL get.dashbase.io | sh
 
 # or
-curl -fsSL https://raw.githubusercontent.com/dashbase/dashbase-cmdline-install/master/get_dashbase-cli.sh -o get_dashbase-cli.sh
-chmod +x get_dashbase-cli.sh
-./get_dashbase-cli.sh
+curl -fsSL https://raw.githubusercontent.com/dashbase/dashbase-cmdline-install/master/get_dashbase-cli.sh | sh
 ```
 
 
