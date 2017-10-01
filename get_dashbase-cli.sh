@@ -196,7 +196,6 @@ do_install() {
                 set -x
                 $sh_c 'apt-get update'
                 $sh_c "apt-get install -y -q $pre_reqs"
-                $sh_c 'apt-get update'
                 $sh_c 'apt-get install -y software-properties-common'
                 if [ "$lsb_dist" = "debian" ] && [ "$dist_version" = "jessie" ]; then
 				    $sh_c 'echo "deb http://http.debian.net/debian jessie-backports main" > /etc/apt/sources.list.d/jessie-backports.list'
@@ -228,7 +227,6 @@ do_install() {
 			fi
 			(
 				set -x
-				$sh_c "$pkg_manager -y update"
 				$sh_c "$pkg_manager install -y -q $pre_reqs"
 				$sh_c "$pkg_manager -y install gcc gcc-c++ kernel-devel libxslt-devel libffi-devel openssl-devel java-1.8.0-openjdk wget"
                 if [ "$lsb_dist" = "fedora" ]; then
